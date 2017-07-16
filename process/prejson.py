@@ -33,10 +33,10 @@ if __name__ == "__main__":
         for line in fd:
             # Replace {"metadata": with \n{"metadata":
             newline = line.replace('{"metadata":', '\n{"metadata":')
-            newline = codecs.encode(newline, encoding='utf-8')
+            # newline = codecs.encode(newline, encoding='utf-8')
             # newline = newline.replace(u'\ufffd', '#')
             # print(newline)
-            output_f.write(newline)
-            output_f.truncate(output_f.tell()-1)
+            output_f.write(newline.encode('utf-8', errors='replace'))
+            # output_f.truncate(output_f.tell()-1)
 
 

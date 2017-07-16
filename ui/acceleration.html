@@ -1,0 +1,354 @@
+<!DOCTYPE html><html>
+<head>
+  <title>Mobicampus Project Acceleration Visualizer</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <!-- jQuery library -->
+  <script src="jquery-3.2.1.min.js"></script>
+  <!-- jQuery UI library -->
+  <script src="jquery-ui.min.js"></script>
+  <!-- jQuery CSS -->
+  <link rel="stylesheet" href="jquery-ui.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <!-- Bootstrap Theme CSS -->
+  <link rel="stylesheet" href="bootstrap-theme.min.css">  
+  <!-- Plotly -->
+  <script src="plotly-latest.min.js"></script>
+</head>
+<body>
+<style type="text/css">
+		.form-style-1 {
+			margin:10px auto;
+			max-width: 400px;
+			padding: 20px 12px 10px 20px;
+			font: 11px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+		}
+		.form-style-1 li {
+			padding: 0;
+			display: block;
+			list-style: none;
+			margin: 10px 0 0 0;
+		}
+		.form-style-1 label{
+			margin:0 0 3px 0;
+			padding:0px;
+			display:block;
+			font-weight: bold;
+		}
+		.form-style-1 input[type=text], 
+		.form-style-1 input[type=date],
+		.form-style-1 input[type=datetime],
+		.form-style-1 input[type=number],
+		.form-style-1 input[type=search],
+		.form-style-1 input[type=time],
+		.form-style-1 input[type=url],
+		.form-style-1 input[type=email],
+		textarea, 
+		select{
+			box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			border:1px solid #BEBEBE;
+			padding: 2px;
+			margin:0px;
+			-webkit-transition: all 0.30s ease-in-out;
+			-moz-transition: all 0.30s ease-in-out;
+			-ms-transition: all 0.30s ease-in-out;
+			-o-transition: all 0.30s ease-in-out;
+			outline: none;  
+		}
+		.form-style-1 input[type=text]:focus, 
+		.form-style-1 input[type=date]:focus,
+		.form-style-1 input[type=datetime]:focus,
+		.form-style-1 input[type=number]:focus,
+		.form-style-1 input[type=search]:focus,
+		.form-style-1 input[type=time]:focus,
+		.form-style-1 input[type=url]:focus,
+		.form-style-1 input[type=email]:focus,
+		.form-style-1 textarea:focus, 
+		.form-style-1 select:focus{
+			-moz-box-shadow: 0 0 8px #88D5E9;
+			-webkit-box-shadow: 0 0 8px #88D5E9;
+			box-shadow: 0 0 8px #88D5E9;
+			border: 1px solid #88D5E9;
+		}
+		.form-style-1 .field-divided{
+			width: 49%;
+		}
+
+		.form-style-1 .field-long{
+			width: 100%;
+		}
+		.form-style-1 .field-select{
+			width: 100%;
+		}
+		.form-style-1 .field-textarea{
+			height: 100px;
+		}
+		.form-style-1 input[type=submit], .form-style-1 input[type=button]{
+			background: #4B99AD;
+			padding: 8px 15px 8px 15px;
+			border: none;
+			color: #fff;
+		}
+		.form-style-1 input[type=submit]:hover, .form-style-1 input[type=button]:hover{
+			background: #4691A4;
+			box-shadow:none;
+			-moz-box-shadow:none;
+			-webkit-box-shadow:none;
+		}
+		.form-style-1 .required{
+			color:red;
+		}
+</style>
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #view_map {
+         width: 100%;
+         height: 600px;
+         margin-bottom: 0px;
+         border: 1px solid #fff;
+      }
+
+</style>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2" style="background-color:lavender;">
+      <div class="list_files">
+         <form action="get_filenames.php" method="post" id="get_filenames">
+      		<ul class="form-style-1">
+      			<li><label>Select User</label></li>
+               <li><select id="deviceid" name="deviceid"></select></li>
+      		</ul>
+         </form>
+      </div>
+      <div id="list_options" class="list_options">
+      </div>
+    </div>
+    <div class="col-sm-10" style="background-color:lavenderblush;">
+    <div id="map" class="map"></div>
+      <div id="view_wave_x" class="view_wave_x"></div>
+      <div id="view_wave_y" class="view_wave_y"></div>
+      <div id="view_wave_z" class="view_wave_z"></div>
+      <div id="view_wave_deltaX" class="view_wave_deltaX"></div>
+      <div id="view_wave_deltaY" class="view_wave_deltaY"></div>
+      <div id="view_wave_deltaZ" class="view_wave_deltaZ"></div>
+    </div>
+    
+  </div>
+  
+</div>
+
+
+<!-- Change the user id to extract the information about the dates -->
+<script>
+   $("#deviceid").on("change", function() {
+      var gps_timestamps =  $(document).data('gps_timestamps');
+      var device = $(this).val();
+      // Find the start and stop timestamps
+      
+      var start = 0;
+      var stop = 0;
+      var start_date = 0;
+      var stop_date = 0;
+      var timestamps = gps_timestamps[device];
+      var keys = Object.keys(timestamps);
+      
+      if(keys.length > 0) {
+        start = keys[0];
+        stop = keys[keys.length - 1];
+        
+        start_date = new Date(parseInt(start));
+        stop_date = new Date(parseInt(stop));
+        
+        //console.log(start_date.toString());
+        //console.log(stop_date.toString());
+        
+        // Create the Date picker element inside the div: list_options
+        $("#list_options").empty();
+        $("#list_options").append('<div id="date_picker" class="date_picker"></div>');
+        $("#date_picker").datepicker({
+						dateFormat: 'yy-mm-dd',
+						minDate: start_date,
+						maxDate: stop_date,
+            onSelect: function() {
+              // console.log($(this).val());
+              processPlot(device, $(this).val());
+            }
+					});
+      }
+   });
+</script>
+
+<script type="text/javascript">
+$.getJSON("data_2.json", function(json) {
+    // console.log(json); // this will show the info it in firebug console
+    // Global Variable
+    // console.log(json);
+    gps_timestamps = json.gps_timestamps;
+    acceleration = json.acceleration;
+    $(document).data('gps_timestamps', gps_timestamps);
+    $(document).data('acceleration', acceleration);
+
+    
+    var devices = [];
+    for (var dev in acceleration) {
+      devices.push(dev);
+    }
+    // console.log(devices);
+    
+    // The select box
+    $.each(devices, function(value, text) {
+      $('#deviceid').append(
+        $('<option></option>').val(text).html(text)
+      )
+    });
+});
+
+// Generates the data for acceleration plotting
+// unfortunatedly explore linearly the data
+// improve this maybe with a red black tree in future
+// developments to search for range of timestamps
+function processPlot(device, date) {
+  var acceleration = $(document).data('acceleration');
+  
+  var search_date = new Date(date + ' 00:00:00');
+  var start_timestamp = search_date.getTime();
+  
+  var search_stop = new Date(date + ' 23:59:59');
+  var stop_timestamp = search_stop.getTime();  
+  
+  var acc_data = acceleration[device];
+  var time_line = new Array();
+  var x = new Array();
+  var y = new Array();
+  var z = new Array();
+  var deltaX = new Array();
+  var deltaY = new Array();
+  var deltaZ = new Array();
+  for (var idx in acc_data) {
+    if(acc_data[idx].timestamp > stop_timestamp) {
+      break;
+    }
+    else {
+      if (acc_data[idx].timestamp >= start_timestamp) {
+        time_line.push(acc_data[idx].timestamp);
+        x.push(acc_data[idx].x);
+        y.push(acc_data[idx].y);
+        z.push(acc_data[idx].z);
+        deltaX.push(acc_data[idx].deltaX);
+        deltaY.push(acc_data[idx].deltaY);
+        deltaZ.push(acc_data[idx].deltaZ);
+      }
+    }
+  }
+  // Delete the content of the map 
+  $("#map").empty();
+  $("#map").append('<div id="view_wave_x" class="view_wave_x"></div>');
+  $("#map").append('<div id="view_wave_y" class="view_wave_y"></div>');
+  $("#map").append('<div id="view_wave_z" class="view_wave_z"></div>');
+  $("#map").append('<div id="view_wave_deltaX" class="view_wave_deltaX"></div>');
+  $("#map").append('<div id="view_wave_deltaY" class="view_wave_deltaY"></div>');
+  $("#map").append('<div id="view_wave_deltaZ" class="view_wave_deltaZ"></div>');
+  if (time_line.length) {
+    console.log(time_line);
+    drawPlot(time_line, x, y, z, deltaX, deltaY, deltaZ);
+  }
+}
+
+function drawPlot(time, x, y, z, deltaX, deltaY, deltaZ) {
+  canvas_x = document.getElementById('view_wave_x');
+	Plotly.plot(canvas_x, [{
+	                       x: time,
+	                       y: x,
+                         marker: {
+                            color: 'rgb(244, 77, 65)' 
+                         }
+                         }], 
+                         {
+                            xaxis: {title: 'Timestamp'},
+                            yaxis: {title: 'Acceleration x'},
+                            margin: { t: 0 } 
+                         } 
+            );
+            
+  canvas_y = document.getElementById('view_wave_y');
+	Plotly.plot(canvas_y, [{
+	                       x: time,
+	                       y: y,
+                         marker: {
+                            color: 'rgb(124, 244, 65)' 
+                         }
+                         }], 
+                         {
+                            xaxis: {title: 'Timestamp'},
+                            yaxis: {title: 'Acceleration y'},
+                            margin: { t: 0 } 
+                         } 
+            );
+  canvas_z = document.getElementById('view_wave_z');
+	Plotly.plot(canvas_z, [{
+	                       x: time,
+	                       y: z,
+                         marker: {
+                            color: 'rgb(79, 65, 244)' 
+                         }
+                         }], 
+                         {
+                            xaxis: {title: 'Timestamp'},
+                            yaxis: {title: 'Acceleration z'},
+                            margin: { t: 0 } 
+                         } 
+            );
+  canvas_deltaX = document.getElementById('view_wave_deltaX');
+	Plotly.plot(canvas_deltaX, [{
+	                       x: time,
+	                       y: deltaX,
+                         marker: {
+                            color: 'rgb(244, 77, 65)' 
+                         }  
+                         }], 
+                         {
+                            xaxis: {title: 'Timestamp'},
+                            yaxis: {title: 'Delta Acceleration x'},
+                            margin: { t: 0 } 
+                         } 
+
+            );
+  canvas_deltaY = document.getElementById('view_wave_deltaY');
+	Plotly.plot(canvas_deltaY, [{
+	                       x: time,
+	                       y: deltaY,
+                         marker: {
+                            color: 'rgb(124, 244, 65)' 
+                         }
+                         }], 
+                         {
+                            xaxis: {title: 'Timestamp'},
+                            yaxis: {title: 'Delta Acceleration y'},
+                            margin: { t: 0 } 
+                         } 
+            );
+  canvas_deltaZ = document.getElementById('view_wave_deltaZ');
+	Plotly.plot(canvas_deltaZ, [{
+	                       x: time,
+	                       y: deltaZ,
+                         marker: {
+                            color: 'rgb(79, 65, 244)' 
+                         }
+                         }], 
+                         {
+                            xaxis: {title: 'Timestamp'},
+                            yaxis: {title: 'Delta Acceleration z'},
+                            margin: { t: 0 } 
+                         } 
+
+            );
+}
+</script>
+
+</body>
+</html>

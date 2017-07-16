@@ -1,0 +1,387 @@
+<!DOCTYPE html><html>
+<head>
+  <title>Mobicampus Project GPS visualizer</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <!-- jQuery library -->
+  <script src="jquery-3.2.1.min.js"></script>
+  <!-- jQuery UI library -->
+  <script src="jquery-ui.min.js"></script>
+  <!-- jQuery CSS -->
+  <link rel="stylesheet" href="jquery-ui.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <!-- Bootstrap Theme CSS -->
+  <link rel="stylesheet" href="bootstrap-theme.min.css">  
+</head>
+<body>
+<style type="text/css">
+		.form-style-1 {
+			margin:10px auto;
+			max-width: 400px;
+			padding: 20px 12px 10px 20px;
+			font: 11px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+		}
+		.form-style-1 li {
+			padding: 0;
+			display: block;
+			list-style: none;
+			margin: 10px 0 0 0;
+		}
+		.form-style-1 label{
+			margin:0 0 3px 0;
+			padding:0px;
+			display:block;
+			font-weight: bold;
+		}
+		.form-style-1 input[type=text], 
+		.form-style-1 input[type=date],
+		.form-style-1 input[type=datetime],
+		.form-style-1 input[type=number],
+		.form-style-1 input[type=search],
+		.form-style-1 input[type=time],
+		.form-style-1 input[type=url],
+		.form-style-1 input[type=email],
+		textarea, 
+		select{
+			box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			border:1px solid #BEBEBE;
+			padding: 2px;
+			margin:0px;
+			-webkit-transition: all 0.30s ease-in-out;
+			-moz-transition: all 0.30s ease-in-out;
+			-ms-transition: all 0.30s ease-in-out;
+			-o-transition: all 0.30s ease-in-out;
+			outline: none;  
+		}
+		.form-style-1 input[type=text]:focus, 
+		.form-style-1 input[type=date]:focus,
+		.form-style-1 input[type=datetime]:focus,
+		.form-style-1 input[type=number]:focus,
+		.form-style-1 input[type=search]:focus,
+		.form-style-1 input[type=time]:focus,
+		.form-style-1 input[type=url]:focus,
+		.form-style-1 input[type=email]:focus,
+		.form-style-1 textarea:focus, 
+		.form-style-1 select:focus{
+			-moz-box-shadow: 0 0 8px #88D5E9;
+			-webkit-box-shadow: 0 0 8px #88D5E9;
+			box-shadow: 0 0 8px #88D5E9;
+			border: 1px solid #88D5E9;
+		}
+		.form-style-1 .field-divided{
+			width: 49%;
+		}
+
+		.form-style-1 .field-long{
+			width: 100%;
+		}
+		.form-style-1 .field-select{
+			width: 100%;
+		}
+		.form-style-1 .field-textarea{
+			height: 100px;
+		}
+		.form-style-1 input[type=submit], .form-style-1 input[type=button]{
+			background: #4B99AD;
+			padding: 8px 15px 8px 15px;
+			border: none;
+			color: #fff;
+		}
+		.form-style-1 input[type=submit]:hover, .form-style-1 input[type=button]:hover{
+			background: #4691A4;
+			box-shadow:none;
+			-moz-box-shadow:none;
+			-webkit-box-shadow:none;
+		}
+		.form-style-1 .required{
+			color:red;
+		}
+</style>
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #view_map {
+         width: 100%;
+         height: 600px;
+         margin-bottom: 0px;
+         border: 1px solid #fff;
+      }
+
+</style>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2" style="background-color:lavender;">
+      <div class="list_files">
+         <form action="get_filenames.php" method="post" id="get_filenames">
+      		<ul class="form-style-1">
+      			<li><label>Select User</label></li>
+               <li><select id="deviceid" name="deviceid"></select></li>
+      		</ul>
+         </form>
+      </div>
+      <div id="list_options" class="list_options">
+      </div>
+    </div>
+    <div class="col-sm-10" style="background-color:lavenderblush;">
+    <div id="map" class="map"></div>
+      <div id="view_map" class="view_map"></div>
+    </div>
+    
+  </div>
+  
+</div>
+
+
+<!-- Change the user id to extract the information about the dates -->
+<script>
+
+function initMap() {
+	//var map = new google.maps.Map(document.getElementById('view_map'), {
+	// zoom: 12,
+	 // center: {lat: 0, lng: 0},
+  // center: {lat: -34.397, lng: 150.644},
+	 //mapTypeId: 'terrain'
+	//});
+}
+</script>
+
+<!-- On change handler for the select box that shows the devices -->
+<script>
+   $("#deviceid").on("change", function() {
+      // Get the gps_timestamps from the document data
+      var gps_timestamps =  $(document).data('gps_timestamps');
+      // The string representing the device
+      var device = $(this).val();
+      
+      // Find the start and stop timestamps from gps_timestamps
+      var start = 0;
+      var stop = 0;
+      var start_date = 0;
+      var stop_date = 0;
+      var timestamps = gps_timestamps[device];
+      var keys = Object.keys(timestamps);
+      
+      if(keys.length > 0) {
+        start = keys[0];
+        stop = keys[keys.length - 1];
+        
+        start_date = new Date(parseInt(start));
+        stop_date = new Date(parseInt(stop));
+        
+        //console.log(start_date.toString());
+        //console.log(stop_date.toString());
+        
+        // Create the Date picker element inside the div: list_options
+        $("#list_options").empty();
+        $("#list_options").append('<div id="date_picker" class="date_picker"></div>');
+        $("#date_picker").datepicker({
+						dateFormat: 'yy-mm-dd',
+						minDate: start_date,
+						maxDate: stop_date,
+            onSelect: function() {
+              // console.log($(this).val());
+              processMap(device, $(this).val());
+            }
+					});
+      }
+   });
+</script>
+
+<script type="text/javascript">
+var circle = 0;
+$(document).data('current_circle', circle);
+
+$.getJSON("data_2.json", function(json) {
+    // From json file, get "gps"
+    gps = json.gps;
+    // From json file, get "gps_timestamps"
+    gps_timestamps = json.gps_timestamps;
+    // Copy those objects to the document, for later retrieval
+    $(document).data('gps', gps);
+    $(document).data('gps_timestamps', gps_timestamps);
+    
+    // Get the list of devices
+    var devices = [];
+    for (var dev in gps_timestamps) {
+      devices.push(dev);
+    }
+    
+    // Fill the select box with the devices
+    $.each(devices, function(value, text) {
+      $('#deviceid').append(
+        $('<option></option>').val(text).html(text)
+      )
+    });
+});
+
+// Process Map
+function processMap(device, date){
+  // Get document Data for a given date
+  // and device_id
+  var gps =  $(document).data('gps');
+  var gps_timestamps =  $(document).data('gps_timestamps');
+  
+  var search_date = new Date(date + ' 00:00:00');
+  var start_timestamp = search_date.getTime();
+  
+  var search_stop = new Date(date + ' 23:59:59');
+  var stop_timestamp = search_stop.getTime();  
+  
+  var timestamps = gps_timestamps[device];
+  // var gps_data = gps[device];
+  var traces = new Array();
+  for (var timestamp in timestamps) {
+    if (timestamp > stop_timestamp){
+      break;
+    }
+    
+    if (timestamp >= start_timestamp) {
+      // Retrieve the index of that timestamp in gps array
+      index = timestamps[timestamp];
+      // console.log(index);
+      // Retrieve the data element at that index in gps
+      gps_data = gps[device][index];
+      console.log(gps_data);
+      traces.push(gps_data);
+    }
+  }
+  // console.log(timestamp);
+  // Delete what is inside the canvas
+  // and redraw the map depending on the data
+  // If there is no data on the selected date show a warning message
+  $("#map").empty();
+  $("#map").append('<div id="view_map" class="view_map"></div>');
+  if (traces.length) {
+    console.log(traces);
+    drawMap(traces);
+  }
+}
+
+// Google API functions to build the map
+function drawMap(Traces){
+  // Get the centroid of the Traces
+  var centroid_latitude = 0;
+  var centroid_longitude = 0;
+  var n_points = Traces.length;
+  for(var point_index in Traces) {
+    centroid_latitude += Traces[point_index].latitude;
+    centroid_longitude += Traces[point_index].longitude;
+  }
+  if (n_points >= 0){
+    centroid_latitude = centroid_latitude / n_points;
+    centroid_longitude = centroid_longitude / n_points;
+  }
+
+  var map = new google.maps.Map(document.getElementById('view_map'), {
+			zoom: 15,
+			center: {lat: centroid_latitude, lng: centroid_longitude},
+      draggable: true,
+			mapTypeId: 'terrain'
+		});
+    // Geocoder for Reverse Geocoding
+  //var google_geocoder = new google.maps.Geocoder;
+  
+  // Helper Functions:
+	// 0. Listener to show info window for each circle:
+	function attachMessageToCircle(c, pc, message) {
+    var infowindow = new google.maps.InfoWindow({
+		  content: message
+		});
+						
+		google.maps.event.addListener(c, 'click', function() {
+		  infowindow.setPosition(c.getCenter());
+			infowindow.open(c.get('map'));
+      
+      // Reset the color of the current_circle
+      var current_circle = $(document).data('current_circle');
+      if (typeof current_circle == 'object') {
+        current_circle.setOptions({
+           strokeColor: '#034769',
+           strokeOpacity: 0.9,
+           strokeWeight: 5,
+           fillColor: '#37474f',
+           fillOpacity: 0.75,
+           radius: 8,
+           zIndex: 5
+        });
+      }
+      
+      // Get the previous circle
+      if (typeof pc == 'object' ) {
+        // Store in current_circle
+        $(document).data('current_circle', pc);
+        // Set options
+        pc.setOptions({
+           strokeColor: '#66655c',
+           strokeOpacity: 0.9,
+           strokeWeight: 5,
+           fillColor: '#efe302',
+           fillOpacity: 0.75,
+           radius: 8,
+           zIndex: 5
+        });
+      }
+		});
+	}  
+  
+  // 1. Draw the Traces function
+  function drawTraces(Traces, Map) {
+     var line = new Array();
+     var points = new Array();
+     for (var point_index in Traces) {
+        var latitude = Traces[point_index].latitude;
+        var longitude = Traces[point_index].longitude;
+        var ltln = new google.maps.LatLng(latitude, longitude);
+        // console.log(ltln);
+        line.push(ltln);
+        
+        var circle = new google.maps.Circle({
+           strokeColor: '#034769',
+           strokeOpacity: 0.9,
+           strokeWeight: 5,
+           fillColor: '#37474f',
+           fillOpacity: 0.75,
+           map: Map,
+           center: ltln,
+           radius: 8,
+           zIndex: 5
+        });
+        var previous_circle = 0;
+        if (points.length) {
+          previous_circle = points[points.length - 1];
+        }
+        points.push(circle);
+        var message = '<h5>Latitude: ' + latitude 
+                    + '<br>Longitude: ' + longitude 
+                    + '<br>Timestamp: ' + Traces[point_index].timestamp
+                    + '<br>Time: ' + Traces[point_index].recordDate;
+				attachMessageToCircle(circle, previous_circle, message);
+     }
+     console.log(line);
+     var Struct = {points: points, line: ''};
+     if (line.length > 0){
+        var path = new google.maps.Polyline({
+           path: line,
+           geodesic: true,
+           strokeColor: '#fb3f51',
+           strokeOpacity: 0.9,
+           strokeWeight: 6,
+           zIndex: 4
+        });
+        path.setMap(Map);
+        Struct["line"] = path;
+     }
+     return Struct;
+  }
+  
+  // Draw the traces
+  var L = drawTraces(Traces, map);
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs7foiRxJv66M3niPPlzGHGaMF09_i74M&callback=initMap&libraries=places" async defer></script> 
+</body>
+</html>
