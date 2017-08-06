@@ -13,11 +13,11 @@ if __name__ == "__main__":
     try:
         options, args = getopt.getopt(sys.argv[1:], "hi:o:", ["ifile=", "odir="])
     except getopt.GetoptError:
-        print('json2csv2.py -i <inputfile> - o <outputdir>')
+        print('prejson.py -i <inputfile> - o <outputdir>')
         sys.exit(2)
     for opt, arg in options:
         if opt == '-h':
-            print('json2csv2.py -i <inputfile> - o <outputdir>')
+            print('prejson.py -i <inputfile> - o <outputdir>')
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
@@ -36,7 +36,8 @@ if __name__ == "__main__":
             # newline = codecs.encode(newline, encoding='utf-8')
             # newline = newline.replace(u'\ufffd', '#')
             # print(newline)
+            # print(line_number)
+            # line_number += 1
+            print("*")
             output_f.write(newline.encode('utf-8', errors='replace'))
             # output_f.truncate(output_f.tell()-1)
-
-

@@ -13,6 +13,9 @@ File: WIFI_capture.csv
 
 File: ACC_capture.csv
 
+File: ACC_repeated_capture.csv
+
+File: GPS_repeated_capture.csv
 
 """
 import json
@@ -183,7 +186,10 @@ if __name__ == "__main__":
                     wifi_id += 1
                 elif "accelerometer" in element:
                     accelerometer = element["accelerometer"]
-                    ACC_accuracy = accelerometer["accuracy"]
+                    if "accuracy" in accelerometer:
+                        ACC_accuracy = accelerometer["accuracy"]
+                    else:
+                        ACC_accuracy = 'NONE'
                     ACC_deltaX = accelerometer["deltaX"]
                     ACC_deltaY = accelerometer["deltaY"]
                     ACC_deltaZ = accelerometer["deltaZ"]

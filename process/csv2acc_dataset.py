@@ -1,13 +1,12 @@
 """
-Generates a final csv with all the data and respective labels
-For acceleration
+Generates a final ACC_capture.csv with all the data and respective labels
+for acceleration, and generates and .features file
 
 Parameters
 --ifile : input csv file with the acceleration values
---odir : output directory for the final dataset
---label : the labels file
 --ws : a windows size
 --sr : the sampling rate for the signal
+--label : the labels file
 
 """
 
@@ -25,12 +24,21 @@ def st_features_frames(data_frame, window_size, sampling_rate):
     time_interval = (1.0 / sampling_rate) * 1000
     ws = window_size * 1000
 
-    t_start = data_frame.timestamp[0]
+
+    # Starting timestamp
+    t_start = data_frame['timestamp'].iloc[0]
     # Normalize the timestamp timeline to start from zero
     time_data = data_frame.timestamp - t_start
-    t_last = time_data[time_data.count() - 1]
+    # End timestamp
+    # time_data.count() contains the number of captured points
+    t_last = time_data.iloc[time_data.count() - 1]
+    # Number of time points according to the sampling rate
     number_of_points = round((t_last - 1) / time_interval)
+    # Time line generated according to the time interval (sampling rate)
+    # and the last timestamp
     time_line = np.linspace(0, t_last, number_of_points, endpoint=True)
+
+    # print(time_line)
 
     # Interpolate linearly x, y, z, and deltaX, deltaY, deltaZ
     lin_function_x = interp1d(time_data, data_frame.x, kind='linear')
@@ -160,6 +168,7 @@ def st_features_frames(data_frame, window_size, sampling_rate):
 
         frame_numbers.append(frame_number)
 
+        # f1 type features
         f1_mean_x.append(np.mean(x))
         f1_mean_y.append(np.mean(y))
         f1_mean_z.append(np.mean(z))
@@ -196,7 +205,7 @@ def st_features_frames(data_frame, window_size, sampling_rate):
         f1_skew_y.append(stats.skew(y))
         f1_skew_z.append(stats.skew(z))
         f1_skew_acc.append(stats.skew(acc))
-
+        # f2 type features
         f2_mean_dx.append(np.mean(dx))
         f2_mean_dy.append(np.mean(dy))
         f2_mean_dz.append(np.mean(dz))
@@ -312,10 +321,19 @@ def st_features_frames(data_frame, window_size, sampling_rate):
                 }
     return features
 
+########################################################################################################################
+
+
+def usage():
+    print('python csv2acc_dataset.py --ifile <input_file> --sr <sampling_rate> --w <window_size> --l <labels_file>')
+    print()
+    print('Example:')
+    print('python csv2acc_dataset.py --ifile data/ACC_capture.csv --sr 30 --w 2 --l datasets/labels.csv')
+
 if __name__ == "__main__":
     inputfile = ''
     labelsfile = ''
-    outputfile = inputfile + '.frames'
+
     # Default values for sampling rate and windows size
     sr = 35
     ws = 1
@@ -324,11 +342,12 @@ if __name__ == "__main__":
     try:
         options, args = getopt.getopt(sys.argv[1:], "hi:s:w:l", ["ifile=", "sr=", "ws=", "labels="])
     except getopt.GetoptError:
-        print('csv2acc_dataset.py -i <inputfile> -s <sampling_rate> -w <window_size>')
+        usage()
         sys.exit(2)
+
     for opt, arg in options:
         if opt == '-h':
-            print('csv2acc_dataset.py -i <inputfile> -s <sampling_rate> -w <window_size>')
+            usage()
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
@@ -338,11 +357,14 @@ if __name__ == "__main__":
             ws = arg
         elif opt in ("-l", "--labels"):
             labelsfile = arg
+
     if inputfile == '':
         print('No input file provided')
+        usage()
         sys.exit(2)
     if labelsfile == '':
         print('No labels file provided')
+        usage()
         sys.exit(2)
 
     # Read the labels file
@@ -357,36 +379,53 @@ if __name__ == "__main__":
     # The final dataframe is:
     # device_id, start_timestamp, stop_timestamp, frame, features, label
 
-
     # Sample rate and window size
+    outputfile = inputfile + '.' + sr + '.' + ws + '.features.csv'
     sr = float(sr)
     ws = float(ws)
+    print("Using input file: {}".format(inputfile))
+    print("Using sample rate: {0:.2f} hz".format(sr))
+    print("Using windows size: {0:.2f} sec".format(ws))
+    print("Using labels file: {}".format(labelsfile))
+    print("Output file will be generated in: {}".format(outputfile))
 
+    ## exit(0)
     # Labels file
     df_labels = pd.read_csv(labelsfile)
-
+    n_records = df_labels.shape[0]
+    n = 1
     # Data file
     df = pd.read_csv(inputfile)
+
 
     # Iterate through all the labels:
     features_dfs = []
     for index, label in df_labels.iterrows():
+        pct = float(n) / n_records
+        print("\rProgress: [{0:50s}] {1:.1f}%".format('#' * int(pct * 50), pct * 100), end="", flush=True)
+
         # Select those rows from df with device_id,
         # and timestamp between start_timestamp and stop_timestamp
         mask = (df['device_id'] == label['device_id']) & (df['timestamp'] >= label['start_timestamp']) \
                & (df['timestamp'] <= label['stop_timestamp'])
         data = df.loc[mask].sort_values(by=['timestamp'])
-        # print(data)
-        features = st_features_frames(data, ws, sr)
-        # print(len(features))
-        df_features = pd.DataFrame(features)
-        df_features['device_id'] = label['device_id']
-        df_features['start_timestamp'] = label['start_timestamp']
-        df_features['stop_timestamp'] = label['stop_timestamp']
-        df_features['label'] = label['label']
-        features_dfs.append(df_features)
-        # print(df_features.head())
+        # print(label['device_id'], label['start_timestamp'], label['stop_timestamp'])
 
-    result = pd.concat(features_dfs)
-    result.to_csv(inputfile + '.features', sep=',')
+        if data.empty:
+            print("\nAlert: No data found between the specified timestamps {} and {}".format(label['start_timestamp'],
+                                                                                           label['stop_timestamp']))
+        else:
+            features = st_features_frames(data, ws, sr)
+            df_features = pd.DataFrame(features)
+            df_features['device_id'] = label['device_id']
+            df_features['start_timestamp'] = label['start_timestamp']
+            df_features['stop_timestamp'] = label['stop_timestamp']
+            df_features['label'] = label['label']
+            features_dfs.append(df_features)
 
+        n += 1
+
+    if len(features_dfs):
+        result = pd.concat(features_dfs)
+        result.to_csv(outputfile, sep=',', index=False)
+        print("\nFile generated")

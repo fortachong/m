@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Test</title>
+  <link rel="stylesheet" href="themes/base/jquery-ui.css">
+  <!----
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  -->
+  <script src="jquery-3.2.1.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+  //$( function() {
+  //  $( "#datepicker" ).datepicker();
+  //} );
+  </script>
+</head>
+<body>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #view_map {
+        width: 100%;
+        height: 100%;
+      }
+      #map {
+        height: 100%;
+      }
+      #popup {
+        position:absolute;
+        display:hidden;
+        top:0%;
+        left:0%;
+        width:200px;
+        height:200px;
+        #margin-top:-263px;
+        #margin-left:-200px;
+        background-color:#fff;
+        z-index:2;
+        padding:0px;
+    }
+    </style>
+<!--
+<div id="datepicker"></div>
+-->
+<div id="popup"><div id="datepicker"></div></div>
+<div id="view_map" class="view_map">
+<div id="map" class="map"></div>
+</div>
+<script>
+
+/*
+$("#datepicker").datepicker({
+    beforeShow: function(){    
+      $("#datepicker").css('{ font-size:10px; }');
+    },
+    dateFormat: 'yymmdd',
+    onSelect: function() {
+      // Generates a GET with the URL
+      process($(this).val());
+    }
+});
+*/
+function initMap(){
+  // console.log("test");
+}
+
+
+// var filename = 'traces.a9f91b3c-8cd9-411c-a06e-451b8205f9a6.20170712.csv';
+
+
+// Process the file according to the Date
+// Date: The date to request for information about the traces
+// Delta: Time parameter of the POI
+// Distance: Distance parameter of the POI
+function process2(Date, Delta, Distance) {
+  var parameters = new URLSearchParams(window.location.search);
+  console.log(parameters);
+  
+  if(parameters.has('device')) {
+    console.log(parameters.get('device'));
+    var device = parameters.get('device');
+    
+    // Search for a date
+    var filename = ''
+    if(Date !== '') {
+      filename = 'traces.' + device + '.' + Date + '.gps.wifi.30.250.poi.csv';
+      // read the file
+      console.log(Date);
+    }
+    else{
+      if(parameters.has('date')) {
+        var date = parameters.get('date');
+        
+        // Date must have format YYYYDDMM
+        // Build the name of the file:
+        filename = 'traces.' + device + '.' + date + '.gps.wifi.30.250.poi.csv';
+        // read the file
+        
+      }
+      else {
+        // Delete the map region
+        
+      }
+    }
+    
+    // Process the filename
+    // read the file with a jquery $.get 
+    if(filename != '') {
+      // Read the file and draw the map
+      $.get('../data/' + filename, function(content) {
+        var lines = content.split("\n");
+        // console.log(lines);
+        var traces = new Array();
+        for(var line_number in lines) {
+          var fields = lines[line_number].split(",");
+          // console.log(lines[line_number]);
+         
+          var trace = new Object();
+          // Index 0: Timestamp
+          // Index 1: Latitude
+          // Index 2: Longitude
+          // Index 3: Type {'gps': GPS, 'wifi': Wifi, 'poi': POI}
+          // From index 4 and so on: depends on type
+          
+          if(typeof fields === 'object') {
+            // console.log(fields);
+            if(typeof fields[1] !== 'undefined') {
+              trace.latitude = fields[1]
+            }
+            if(typeof fields[2] !== 'undefined') {
+              trace.longitude = fields[2]
+            }
+            if(typeof fields[3] !== 'undefined') {
+              trace.type = fields[3]
+            }
+            if(typeof fields[0] !== 'undefined') {
+              trace.timestamp = fields[0]
+            }
+            
+            // This depends only on type
+            // if gps f1: latitude, f2: speed
+            // if poi f1: duration, f2: number of records
+            trace.f1 = '';
+            trace.f2 = '';
+            if(typeof fields[4] !== 'undefined') {
+              trace.f1 = fields[4]
+            }
+            if(typeof fields[5] !== 'undefined') {
+              trace.f2 = fields[5]
+            }
+
+            if(typeof trace.latitude !== 'undefined') {
+              traces.push(trace);
+            }
+          }
+        }
+        // console.log(traces);
+        $(document).data('Traces', traces);
+        
+        // Draw the map
+        if (traces.length > 0){
+          $("#view_map").empty();
+          $("#view_map").append('<div id="map" class="map"></div>');
+          
+          if (traces.length) {
+            // console.log(traces);
+            drawMap(traces);
+          }
+        }
+        // Redraw the datepicker control
+        drawDatePicker(Date);
+      }).fail(function() {
+          // Delete the contect of the map
+          $("#view_map").empty();
+        });
+    }
+  }
+}
+
+
+// Draw the date picker
+function drawDatePicker(Date){
+  $("#popup").empty();
+  $("#popup").append('<div id="datepicker" class="datepicker"></div>');
+  $("#datepicker").datepicker({
+    beforeShow: function(){    
+      $("#datepicker").css('{ font-size:10px; }');
+    },
+    dateFormat: 'yymmdd',
+    onSelect: function() {
+      // Generates a GET with the URL
+      // process($(this).val());
+    }    
+  });
+  $("#datepicker").datepicker("setDate", Date);
+}
+
+/*############################################################################*/
+// Draws the configuration of POI select, a button and the date picker
+function drawControls(Configuration, Date) {
+  $("#popup").empty();
+  $("#popup").append('<div id="options" class="options">'
+  + '<select id="config" class="config">'
+  + '</select><input id="send" class="send" type="button" value="Search">'
+  + '</div>');
+  
+  // Add the select control
+  for(var key in Configuration) {
+    $('#config').append(
+      $('<option></option>').val(key).html('Config: ' + key)
+    );
+  }
+  
+  // Add the button event handler
+  $('#send').click(function() {
+    // Get the value of the Selected configuration
+    var selected = $('#config').val();
+    // Add to global variables
+    $(document).data('Options', selected);
+    
+    // console.log(selected);
+    // Get the array of valid dates from the dictionary
+    if(selected in Configuration) {
+      var dates = Configuration[selected];
+      if(dates.length) {
+        console.log('length: '+dates.length);
+        console.log(dates);
+        // Show the datepicker
+        $("#popup").append('<div id="datepicker" class="datepicker"></div>');
+        $("#datepicker").datepicker({
+          beforeShow: function(){    
+            $("#datepicker").css('{ font-size:10px; }');
+          },
+          dateFormat: 'yymmdd',
+          constrainInput: true,
+          beforeShowDay: function(Date) {
+            var str = jQuery.datepicker.formatDate('yymmdd', Date);
+            return [ dates.indexOf(str) != -1 ]
+          },
+          onSelect: function() {
+            // Generates a GET with the URL
+            // process($(this).val());
+            var device = $(document).data('device');
+            var options = $("#config").val();
+            
+            //console.log(device);
+            //console.log(options);
+            //console.log($(this).val());
+            process(device, $(this).val(), options);
+          }    
+        });
+        $("#datepicker").datepicker("setDate", Date);
+      }
+    }
+  });
+}
+/*############################################################################*/
+// Extracts the fields separated by separator into and array
+// start: index in str where the search starts
+// nbr_of_fields: number of fields to extract
+function getFields(str, separator, start, nbr_of_fields){
+  var ctr = 1;
+  var buffer = '';
+  var idx = -1;
+  var last_idx = start;
+  var fields = new Array();
+  
+  if(start < str.length) {
+    buffer = str.substring(start, str.length);
+  }
+  // console.log(buffer);
+  
+  while(true) {
+    if(ctr > nbr_of_fields) {
+      break;
+    }
+    idx = buffer.indexOf(separator);
+    if(idx != -1) {
+      // console.log(buffer);
+      fields.push(buffer.substring(0, idx));
+      idx += 1;
+      last_idx += idx;
+      if(idx < buffer.length) {
+        buffer = buffer.substring(idx, buffer.length);
+      }
+      else {
+        break;
+      }
+    }
+    else {
+      fields.push(buffer);
+      last_idx += buffer.length;
+    }
+    ctr += 1;
+  }
+  fields.push(last_idx);
+  return fields;
+}
+// Process File, reads a csv with the forma specified:
+/*
+* Field1: Timestamp
+* Field2: Latitude
+* Field3: Longitude
+* Field4: Type of register (wifi, gps, poi)
+* Field5: If type is gps, altitude, if type is poi, duration in minutes
+* Field6: If type is gps, speed, if type is poi, number of points inside POI
+* Field7: Only for POI, address 1
+* Field8: Only for POI, address 2
+* Field9: Only for POI, purpose (each separated by ,)
+*/
+function processFile(filename) {
+  $.get('../data/' + filename, function(content) {
+        var lines = content.split("\n");
+        // console.log(lines);
+        var traces = new Array();
+        
+        for(var line_number in lines) {
+          if(lines[line_number] != '') {
+            fields = getFields(lines[line_number], ',', 0, 4);
+            var addresses = new Array();
+            var purposes = new Array();
+            console.log(fields);
+            if (fields.length == 5) {
+              // Continue with the other fields:
+              var trace = new Object();
+              trace.timestamp = fields[0];
+              trace.latitude = fields[1];
+              trace.longitude = fields[2];
+              trace.type = fields[3].trim();
+              if(trace.type == 'poi' || trace.type == 'gps'){
+                // Read the next 2 fields
+                last_idx = fields[4];
+                
+                fields = getFields(lines[line_number], ',', last_idx, 2);
+                // console.log(fields);
+                if(fields.length == 3) {
+                  trace.f1 = fields[0].trim();
+                  trace.f2 = fields[1].trim();
+                  console.log(trace.f1);
+                  if(trace.type == 'poi') {
+                    last_idx = fields[2];
+                    
+                    // Read the position of the first " and the last "
+                    if(last_idx < lines[line_number].length){
+                      var addr = lines[line_number].substr(last_idx, lines[line_number].length);
+                      var q_pos_1 = addr.indexOf('"');
+                      var q_pos_2 = addr.lastIndexOf('"');
+                      if((q_pos_1 != -1) && (q_pos_2 != -1) && (q_pos_1 != q_pos_2)) {
+                        addr1 = addr.substring(q_pos_1 + 1, q_pos_2);
+                        pps = addr.substring(q_pos_2 + 2, addr.length);
+                        addresses = addr1.split('","');
+                        purposes = pps.split(",");
+                        console.log(addresses);
+                        console.log(purposes);
+                      } 
+                    }
+                  }
+                }
+              }
+              
+              console.log(trace.type);
+              trace.addresses = addresses;
+              trace.purposes = purposes;
+              traces.push(trace);
+            }
+          }
+        }
+        // Call the function to draw the map
+        if (traces.length > 0){
+          $("#view_map").empty();
+          $("#view_map").append('<div id="map" class="map"></div>');
+          
+          if (traces.length) {
+            // console.log(traces);
+            drawMap(traces);
+          }
+        }
+  });
+}
+/*############################################################################*/
+// Process the request
+function process(Device, Date, Options) {
+  // Date: YYYYMMDD
+  
+  // Options Duration-Distance
+  var opt = Options.split('-');
+  if(opt.length) {
+    duration = opt[0];
+    distance = opt[1];
+    
+    filename = 'traces.' 
+              + Device + '.'
+              + Date + '.gps.wifi.' 
+              + duration + '.' + distance 
+              + '.poi.addr.csv';
+    // Read the file and show the map
+    console.log(filename);
+    processFile(filename);
+  }
+}
+
+/*############################################################################*/
+// Calculates the distance
+function distance(latitude1, longitude1, latitude2, longitude2){
+  var earthRadius = 6371;
+  var lat1 = latitude1 * (Math.PI/180);
+  var lat2 = latitude2 * (Math.PI/180);
+  var dLat = Math.abs(latitude2 - latitude1) * (Math.PI/180);
+  var dLng = Math.abs(longitude2 - longitude1) * (Math.PI/180);
+  var a = (Math.sin(dLat / 2) * Math.sin(dLat / 2)) + 
+          Math.cos(latitude1) * Math.cos(latitude2) +
+          (Math.sin(dLng / 2) * Math.sin(dLng / 2));
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  dist = earthRadius * c;
+  return dist;
+}
+
+// Attach a marker to an event to display the infowindow
+function attachMessageToMarker(Marker, Message) {
+  if(Message != ''){
+    var infowindow = new google.maps.InfoWindow({
+      content: Message
+    });
+    google.maps.event.addListener(Marker, 'click', function() {
+      infowindow.setPosition(Marker.getPosition());
+      // infowindow.open(Marker.get('map'));
+      infowindow.open(Marker.getMap());
+    });
+    //google.maps.event.addListener(Marker, 'mouseout', function() {
+    //  infowindow.setMap(null);
+    //});    
+  }
+}
+
+// Draw the map
+function drawMap(Traces) {
+  var centroid_latitude = 0;
+  var centroid_longitude = 0;
+  var n_points = Traces.length;
+  
+  for(var index in Traces) {
+    centroid_latitude += parseFloat(Traces[index].latitude);
+    centroid_longitude += parseFloat(Traces[index].longitude);
+  }
+  // console.log(centroid_latitude);
+  if (n_points >= 0){
+    centroid_latitude = centroid_latitude / n_points;
+    centroid_longitude = centroid_longitude / n_points;
+  }
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 13,
+			center: {lat: centroid_latitude, lng: centroid_longitude},
+      draggable: true,
+			mapTypeId: 'terrain'
+	});
+  
+  drawTraces(Traces, map);
+}
+
+// Draw the traces of the trajectory
+function drawTraces(Traces, Map) {
+  var points = new Array();
+  var line = new Array();
+  var total_distance = 0;
+  var total_time = 0;
+  var start_timestamp = 0;
+  var stop_timestamp = 0;
+  
+  // Get distance parameter of POI
+  var dist = 250;
+  var options = $(document).data('Options').split('-');
+  if(typeof options !== 'undefined' && (options.length)) {
+    dist = parseInt(options[1]);
+  }
+  
+  
+  if(Traces.length) {
+    start_timestamp = Traces[0];
+    stop_timestamp = Traces[Traces.length - 1];
+    total_time = stop_timestamp - start_timestamp
+  }
+  
+  for(var index in Traces) {
+    var latitude = parseFloat(Traces[index].latitude);
+    var longitude = parseFloat(Traces[index].longitude);
+    var ltln = new google.maps.LatLng(latitude, longitude);
+    line.push(ltln);
+    
+    var icon = '';
+    var msg = '';
+    // Convert timestamp to Date
+    var date = new Date(parseInt(Traces[index].timestamp) * 1000);
+    // console.log(Traces[index].type);
+    
+    
+    if(Traces[index].type == 'gps') {
+      icon = 'http://maps.google.com/mapfiles/ms/micons/red-dot.png';
+      msg = '<h4>GPS<br>Altitude: ' + Traces[index].f1 
+          + '<br>Speed: ' + Traces[index].f2
+          + '<br>Date: ' + date.toUTCString();
+    }
+    else {
+      if(Traces[index].type == 'wifi') {
+        console.log(Traces[index].type);
+        icon = 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png';
+        msg = '<h4>Wifi' 
+            + '<br>Date: ' + date.toUTCString();
+      }
+      else {
+        icon = 'http://maps.google.com/mapfiles/ms/micons/green-dot.png';
+        msg = '<h4>POI<br>Duration: ' + Traces[index].f1 
+            + ' minutes<br>Records: ' + Traces[index].f2
+            + '<br>Date: ' + date.toUTCString();
+        // In the case of a POI, if the addresses and purposes are in the trace
+        // generates two select lists
+        var addresses = Traces[index].addresses;
+        var addr = '';
+        if(addresses.length) {
+          addr = '<br>Address: <select name="address" id="address">';
+          for(var idx in addresses) {
+            addr += '<option value="' + addresses[idx] + '">' 
+                  + addresses[idx] + '</option>';
+          }
+          addr += '</select>';
+        }
+        
+        if(addr != '') {
+          msg += addr;
+        }
+        
+        var purposes = Traces[index].purposes;
+        var pps = '';
+        if(purposes.length) {
+          if(purposes[0] != '') {
+            pps = '<br> Purpose: <select name="purpose" id="purpose">';
+            for(var idx in purposes) {
+              if(purposes[idx] != '') {
+                pps += '<option value="' + purposes[idx] + '">'
+                      + purposes[idx] + '</option>';
+              }
+            }
+            pps += '</select>';
+          }
+        }
+        
+        if(pps != '') {
+          msg += pps;
+        }
+        
+        // In the case of the POI, add a circle for the radius
+        var circle = new google.maps.Circle({
+								strokeColor: '#4286f4',
+								strokeOpacity: 0.8,
+								strokeWeight: 2,
+								fillColor: '#41f4b2',
+								fillOpacity: 0.25,
+								map: Map,
+								center: ltln,
+								radius: dist,  // POI of 250 mts is a default
+								zIndex: 4
+							});
+      }
+    }
+   
+    // Add Marker
+    var marker = new google.maps.Marker({
+      position: ltln,
+      icon: icon,
+      map: Map
+    });
+    // Add Info Window
+    attachMessageToMarker(marker, msg);
+  }
+  // console.log(line);
+  if (line.length > 0) {
+    var path = new google.maps.Polyline({
+      path: line,
+      geodesic: true,
+      strokeColor: '#FF0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+    path.setMap(Map);
+  }
+}
+
+/* ########################################################################## */
+// Load the contents of the controls depending on the value of the device id
+function loadDirectory() {
+  // Reads the content of the directory ../data
+  // Only if the deviceid parameter is set in the URL
+  var device = '';
+  var parameters = new URLSearchParams(window.location.search);
+  // console.log("loadData()");
+  // console.log(parameters);
+  
+  if(parameters.has('device')) {
+    // Add device as a variable
+    device = parameters.get('device');
+  }
+  // Save the data in the DOM and call the function
+  // to display the controls (Date, Time, and Distance parameters of the POI)
+  $(document).data('device', device);  
+  if(device != '') {
+    // Read the directory ../data
+    // to parse the values of the parameters and the available dates
+    $.get("../data", function(data) {
+      // Read the data into global variables and 
+      // draw the calendar without the map
+      // console.log(data);
+      // var d = data.match(/href="([^']+)"/);
+      var matches = data.match(/<a\s+(?:[^>]*?\s+)?href=(["'])(.*?)\1/g);
+      var configuration = {};
+      
+      for(var index in matches) {
+        // console.log(matches[index]);
+        var filename = matches[index];
+        var idx_start = filename.indexOf('traces.');
+        // console.log(idx_start);
+        if(idx_start != -1) {
+          var idx_end = filename.indexOf('.poi.addr.csv');
+          if(idx_end != -1) {
+            fn = filename.substring(idx_start, idx_end + 4);
+            // console.log(fn);
+            fn_elements = fn.split('.');
+            if(1 in fn_elements && fn_elements[1] == device) {
+              // console.log(fn);
+              if(5 in fn_elements) {
+                duration = fn_elements[5];
+              }
+              if(6 in fn_elements) {
+                distance = fn_elements[6];
+              }
+              var key = duration + '-' + distance;
+              if(2 in fn_elements) {
+                if(key in configuration){
+                  configuration[key].push(fn_elements[2]);
+                } else {
+                  configuration[key] = new Array();
+                  configuration[key].push(fn_elements[2])
+                }
+              }
+            }
+          }
+        }
+      }
+      // console.log(configuration);
+      // If the configuration is setup, draw the Controls
+      $(document).data('configuration', configuration);  
+      if(Object.keys(configuration).length){
+        drawControls(configuration, '');
+      }
+    });
+  }
+  else {
+    // Possibly display an error
+    
+  }
+}
+
+/*############################################################################*/
+
+// Load the data from the directory listing
+$(document).ready(loadDirectory);
+
+// processFile('traces.f9e46305-cb0c-41c8-bc26-b492a84875c3.20170706.gps.wifi.30.250.poi.addr.csv');
+
+// Call the main processing function
+// I think it is better to put it in initMap
+// because of the asynchronous call from google api
+// process('');
+
+</script> 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAs7foiRxJv66M3niPPlzGHGaMF09_i74M&callback=initMap&libraries=places" async defer></script> 
+</body>
+</html>

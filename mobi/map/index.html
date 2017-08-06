@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Test</title>
+  <link rel="stylesheet" href="themes/base/jquery-ui.css">
+  <!----
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  -->
+  <script src="jquery-3.2.1.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+  //$( function() {
+  //  $( "#datepicker" ).datepicker();
+  //} );
+  </script>
+</head>
+<body>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #view_map {
+        width: 100%;
+        height: 100%;
+      }
+      #map {
+        height: 100%;
+      }
+      #popup {
+        position:absolute;
+        display:hidden;
+        top:0%;
+        left:0%;
+        width:200px;
+        height:400px;
+        #margin-top:-263px;
+        #margin-left:-200px;
+        background-color:#fff;
+        z-index:2;
+        padding:0px;
+    }
+    </style>
+<!--
+<div id="datepicker"></div>
+-->
+<div id="popup"><div id="datepicker"></div></div>
+
+
+</div>
+<script>
+/*############################################################################*/
+// Process users file: Reads all devices from the users file
+function loadDevices() {
+  var filename = '../data/users';
+  $.get(filename, function(content) {
+    var lines = content.split("\n");
+    var devices = new Array();
+    console.log(lines);
+    for(var line_number in lines) {
+      if(lines[line_number] != '') {
+        devices.push(lines[line_number]);
+      }
+    }
+    // Draw the control for selecting user
+    $("#popup").empty();
+    $("#popup").append('<div id="options" class="options">'
+    + '<select id="device" class="device">'
+    + '</select><input id="send" class="send" type="button" value="Search">'
+    + '</div>');
+    
+    // Add the select control
+    for(var idx in devices) {
+      $('#device').append(
+        $('<option></option>').val(devices[idx]).html(devices[idx])
+      );
+    }
+    // Add click event to the button
+    $('#send').click(function() {
+      // Get the value of the Selected configuration
+      var selected = $('#device').val();
+      var f = document.createElement("form");
+      f.method = "GET";
+      f.action = "map.html";
+      
+      ft = document.createElement("input");
+      ft.type = "hidden";
+      ft.name = "device";
+      ft.value = selected;
+      f.appendChild(ft);
+      document.body.appendChild(f);
+      f.submit();
+    });
+  });
+}
+
+/*############################################################################*/
+
+// Load the data from the directory listing
+$(document).ready(loadDevices);
+</script> 
+</body>
+</html>

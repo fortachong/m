@@ -138,9 +138,13 @@ if __name__ == "__main__":
                 # In Accelerometer data record repeated in another dictionary
                 elif "accelerometer" in element:
                     accelerometer = element["accelerometer"]
+                    if "accuracy" in accelerometer:
+                        ACC_accuracy = accelerometer["accuracy"]
+                    else:
+                        ACC_accuracy = 'NONE'
                     record = {'tid': tid,
                               'acc_id': acc_id,
-                              'accuracy': accelerometer["accuracy"],
+                              'accuracy': ACC_accuracy,
                               'deltaX': accelerometer["deltaX"],
                               'deltaY': accelerometer["deltaY"],
                               'deltaZ': accelerometer["deltaZ"],
