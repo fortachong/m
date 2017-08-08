@@ -89,7 +89,7 @@ if __name__ == "__main__":
             raw_dfs.append(data)
             # print(df_features.head())
 
-    outputfile = inputfile + '.raw'
+    outputfile = inputfile + '.raw.csv'
     if len(raw_dfs):
         result = pd.concat(raw_dfs)
         result.to_csv(outputfile, sep=',')

@@ -1,27 +1,88 @@
 """
-Reads lines in filename
-Outputs 3 separate csv files for GPS, WIFI and Acceleration
+Reads lines in .json file
+Outputs 4 separate csv files for GPS, WIFI and Acceleration for future processing
+with usual data analysis tools like R and python
 
 Execute in this order
-1. prejson.py > json2csv2.py
+#bash sed 's/{"metadata":/\n{"metadata":/g' original.json > data.json
+To produce a json file with each metadata in a new line,
+then use this script
 
 Fields Description:
 
 File: GPS_capture.csv
+    tid:                Identifier of the metadata block (transaction)
+    header_timestamp:   Timestamp of the header
+    device_id:          Identifier of the device
+    point_id:           Identifier of the gps point
+    accuracy:           Estimated accuracy of this location in meters
+    altitude:           Altitude in meters above the WGS84 reference ellipsoid
+    bearing:            Bearing in degrees East of truth North
+    latitude:           Latitude in degrees
+    longitude:          Longitude in degrees
+    mode:               Fix acquisition mode (ACTIVE, PASSIVE)
+    source:             Source that generated the location fix (GPS, NETWORK, UNKNOWN)
+    speed:              Speed in meters/sec over ground
+    timestamp:          Timestamp of the operation
+    supportedSeeds:     Supported seeds
+    recordDate:         Time of record
 
-File: WIFI_capture.csv
+File: WIFI_capture
+    tid:                Identifier of the metadata block (transaction)
+    header_timestamp:   Timestamp of the header
+    device_id:          Identifier of the device
+    last_point_id:      Identifier of the last gps point
+    wifi_id:            Identifier of the wifi record
+    authentication:     Type of wifi authentication
+    bssid:              Basic service set identifier
+    frequency:          Frequency of carrier
+    rssi:               Received Signal Strength Indication
+    ssid:               Service Set Identifier
+    timestamp:          Timestamp of the operation
+    supportedSeeds:     Supported seeds
+    recordDate:         Time of record
 
 File: ACC_capture.csv
+    tid:                Identifier of the metadata block (transaction)
+    header_timestamp:   Timestamp of the header
+    device_id:          Identifier of the device
+    acc_id:             Identifier of the acceleration record
+    accuracy:           Sensor's current accuracy
+    deltaX:             Absolute difference between the two last traces on the x axis
+    deltaY:             Absolute difference between the two last traces on the y axis
+    deltaZ:             Absolute difference between the two last traces on the z axis
+    minDelay:           Minimal time to wait between two events in microseconds
+    model:              Sensor's model name
+    vendor:             Sensor's vendor name
+    version:            Version of the sensor
+    x:                  Instantaneous acceleration on the x axis
+    y:                  Instantaneous acceleration on the y axis
+    z:                  Instantaneous acceleration on the z axis
+    supportedSeeds:     Supported seeds
+    timestamp:          Timestamp of the operation
+    recordDate:         Time of record
 
 File: ACC_repeated_capture.csv
+The format is the same as ACC_capture.csv.
+There are many records with the same timestamp, that cause problems in extracting features,
+therefore these records are filtered out
 
-File: GPS_repeated_capture.csv
 
 """
 import json
 import sys
 import getopt
 import codecs
+
+
+def usage():
+    print('python json2csv.py --ifile <input_file> --odir <output_directory>')
+    print()
+    print('Example:')
+    print('python json2csv.py --ifile data.json --odir data')
+
+
+########################################################################################################################
 
 if __name__ == "__main__":
     inputfile = ''
@@ -30,11 +91,11 @@ if __name__ == "__main__":
     try:
         options, args = getopt.getopt(sys.argv[1:], "hi:o:", ["ifile=", "odir="])
     except getopt.GetoptError:
-        print('json2csv2.py -i <inputfile> - o <outputdir>')
+        usage()
         sys.exit(2)
     for opt, arg in options:
         if opt == '-h':
-            print('json2csv2.py -i <inputfile> - o <outputdir>')
+            usage()
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
@@ -66,6 +127,15 @@ if __name__ == "__main__":
     WIFI_f.write(WIFI_header.encode('utf-8'))
     ACC_f.write(ACC_header.encode('utf-8'))
     ACC_rep_f.write(ACC_rep_header.encode('utf-8'))
+
+    print("Generating .csv files")
+    print("Using input file: {}".format(inputfile))
+    print("Output files to be generated:")
+    print(output_dir + '/' + GPS_capture_file)
+    print(output_dir + '/' + WIFI_capture_file)
+    print(output_dir + '/' + ACC_capture_file)
+    print(output_dir + '/' + ACC_rep_capture_file)
+    print()
 
     # with open(inputfile, "rb") as fd:
     line_number = 1

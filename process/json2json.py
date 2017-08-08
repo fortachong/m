@@ -1,10 +1,12 @@
 """
-Reads lines in filename
-Outputs 1 json file with a special format for
-reading in a javascript capable browser with ui.html
+Reads lines in .json file
+Outputs another .json file for displaying in a javascript page
 
-Execute in this order
-1. prejson.py > json2json.py
+Execute in this order (if not previously execute)
+#bash sed 's/{"metadata":/\n{"metadata":/g' original.json > data.json
+To produce a json file with each metadata in a new line,
+then use this script
+
 """
 
 import json
@@ -13,18 +15,28 @@ import getopt
 import codecs
 import collections
 
+
+def usage():
+    print('python json2json.py --ifile <input_file> --odir <output_directory>')
+    print()
+    print('Example:')
+    print('python json2json.py --ifile data.json --odir data')
+
+
+########################################################################################################################
+
 if __name__ == "__main__":
     inputfile = ''
-    output_dir = 'output'
+    output_dir = 'data'
     # Read command options
     try:
         options, args = getopt.getopt(sys.argv[1:], "hi:o:", ["ifile=", "odir="])
     except getopt.GetoptError:
-        print('json2csv2.py -i <inputfile> - o <outputdir>')
+        usage()
         sys.exit(2)
     for opt, arg in options:
         if opt == '-h':
-            print('json2csv2.py -i <inputfile> - o <outputdir>')
+            ussage()
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
@@ -40,7 +52,7 @@ if __name__ == "__main__":
     wifi_id = 1
     acc_id = 1
 
-    output_file = 'data.json'
+    output_file = 'data_2.json'
     # output_f = open(output_dir + '/' + output_file, 'w')
     data_json = {}
 

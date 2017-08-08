@@ -1,0 +1,6 @@
+data/
+datasets/
+models/
+testing/
+*.json
+*.pre

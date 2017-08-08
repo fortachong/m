@@ -23,19 +23,32 @@ import pickle
 
 
 def usage():
-    print('python train_dt_acc.py --ifile <input_file> --odir <output_directory>')
+    print('python train_dt_acc.py --ifile <input_file> --f <features_filename> --odir <output_directory>')
     print()
     print('Example:')
-    print('python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --odir models')
+    print('python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models')
+
+
+# Reads the features file for training
+def read_features(filename):
+    features = []
+    with open(filename) as f_feat:
+        for line in f_feat:
+            line = line.replace('\n', '')
+            line = line.replace('\t', '')
+            if line != '':
+                features.append(line)
+    return features
 
 
 if __name__ == "__main__":
     inputfile = ''
+    featuresfile = ''
     outputdir = ''
 
     # Read command options
     try:
-        options, args = getopt.getopt(sys.argv[1:], "hi:o", ["ifile=", "odir="])
+        options, args = getopt.getopt(sys.argv[1:], "hi:f:o", ["ifile=", "f=", "odir="])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -45,11 +58,17 @@ if __name__ == "__main__":
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
+        elif opt in ("-f", "--f"):
+            featuresfile = arg
         elif opt in ("-o", "--odir"):
             outputdir = arg
 
     if inputfile == '':
         print('No input file provided')
+        usage()
+        sys.exit(2)
+    if featuresfile == '':
+        print('No features file provided')
         usage()
         sys.exit(2)
     if outputdir == '':
@@ -69,21 +88,15 @@ if __name__ == "__main__":
 
     print("Decision Tree Model")
     print("Using input file: {}".format(inputfile))
+    print("Using features file: {}".format(featuresfile))
     print("Model file will be generated in: {}/{}".format(outputdir, outputfile))
     print("Confusion matrix file will be generated in: {}/{}".format(outputdir, cmfile))
 
     df = pd.read_csv(inputfile)
-    selected_features = ['f1_max_acc',      # Max value of the magnitude of the acceleration vector
-                         'f1_mean_acc',     # Mean value of the magnitude of the acceleration vector
-                         'f1_median_acc',   # Median value of the magnitude of the acceleration vector
-                         'f1_min_acc',      # Min value of the magnitude of the acceleration vector
-                         'f1_std_acc',      # Standard deviation of the magnitude of the acceleration vector
-                         'f2_max_dacc',     # Max value of the magnitude of the delta vector
-                         'f2_mean_dacc',    # Mean of the magnitude of the delta vector
-                         'f2_median_dacc',  # Median of the magnitude of the delta vector
-                         'f2_min_dacc',     # Min of the magnitude of the delta vector
-                         'f2_std_dacc'      # Standard deviation of the magnitude of the delta vector
-                         ]
+    selected_features = read_features(featuresfile)
+    print("Features:")
+    print(selected_features)
+
     X = df[selected_features]
     y_labels = df['label']
     # Transform labels into numbers
