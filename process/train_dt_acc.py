@@ -20,6 +20,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 import pickle
+import lib
 
 
 def usage():
@@ -27,18 +28,6 @@ def usage():
     print()
     print('Example:')
     print('python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models')
-
-
-# Reads the features file for training
-def read_features(filename):
-    features = []
-    with open(filename) as f_feat:
-        for line in f_feat:
-            line = line.replace('\n', '')
-            line = line.replace('\t', '')
-            if line != '':
-                features.append(line)
-    return features
 
 
 if __name__ == "__main__":
@@ -93,7 +82,7 @@ if __name__ == "__main__":
     print("Confusion matrix file will be generated in: {}/{}".format(outputdir, cmfile))
 
     df = pd.read_csv(inputfile)
-    selected_features = read_features(featuresfile)
+    selected_features = lib.read_features(featuresfile)
     print("Features:")
     print(selected_features)
 

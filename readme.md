@@ -1,4 +1,4 @@
-# Project Mobicampus
+# Project Mobicampus data preprocessing and learning
 
 ## 1. Directory Structure
 ```console
@@ -238,6 +238,10 @@ f3_abs_fft_3hz | Magnitude of fft of magnitude of acceleration vector at 3 Hz
 
 ### 2.4. Learning Algorithms
 
+
+
+
+## 3. Examples:
 
 
 

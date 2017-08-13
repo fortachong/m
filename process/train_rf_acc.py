@@ -20,6 +20,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 import pickle
+import lib
 
 
 def usage():
@@ -91,7 +92,7 @@ if __name__ == "__main__":
     print("Confusion matrix file will be generated in: {}/{}".format(outputdir, cmfile))
 
     df = pd.read_csv(inputfile)
-    selected_features = read_features(featuresfile)
+    selected_features = lib.read_features(featuresfile)
     print("Features:")
     print(selected_features)
 

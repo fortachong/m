@@ -20,6 +20,25 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 
 
+# Generates a confusion matrix file and print a report of performance
+def generates_report(model, Y, Y_hat, file):
+    classes = model['label_encoder'].classes_
+    print("Class encoding:")
+    for idx, classname in enumerate(classes):
+        print("{} : {}".format(str(idx), classname))
+    # Perform the prediction on Test Set
+    print("Classification Report on Testing Data:")
+    print(classification_report(Y, Y_hat))
+    print("Confusion Matrix:")
+    cm = confusion_matrix(Y, Y_hat)
+    cm_data = {'True labels': classes}
+    for idx, classname in enumerate(classes):
+        cm_data[classname] = cm[:, idx]
+    print(cm)
+    cm_result = pd.DataFrame(cm_data)
+    cm_result.to_csv(file, sep=',', index=False)
+
+
 def usage():
     print('python predict_acc.py --ifile <input_file> --m <model_file> [--t 1]')
     print()
@@ -62,10 +81,12 @@ if __name__ == "__main__":
         test = True
 
     outputfile = inputfile + '.prediction.csv'
+    cmfile = inputfile + '.prediction.cm.csv'
 
     print("Using model file: {}".format(modelfile))
     print("Using input file: {}".format(inputfile))
     print("Predictions file will be generated in: {}".format(outputfile))
+    print("Confusion matrix file will be generated in: {}".format(cmfile))
 
     # Read the data from inputfile
     df = pd.read_csv(inputfile)
@@ -95,8 +116,9 @@ if __name__ == "__main__":
         df_x['label'] = encoder.inverse_transform(model['y_test'])
         df_x['predicted'] = y_predicted_labels
         df_x.to_csv('model.predicted', sep=',', index=False)
+        generates_report(model, model['y_test'], y_predicted, cmfile)
     else:
         df['predicted'] = y_predicted_labels
         df.to_csv(outputfile, sep=',', index=False)
-        # print(y_predicted_labels)
-
+        y = encoder.transform(df['label'].values)
+        generates_report(model, y, y_predicted, cmfile)
