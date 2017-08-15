@@ -1,52 +1,51 @@
 """
 Generates a final csv with all the raw acceleration data and respective labels
-Dont calculate features
-For acceleration
+Dont calculate features for acceleration. It is just a raw labeled file with the
+acceleration points in it
 
 Parameters
 --ifile : input csv file with the acceleration values
---odir : output directory for the final dataset
---label : the labels file
---ws : a windows size
---sr : the sampling rate for the signal
+--l : the labels file
 
 """
 
 import getopt
 import sys
 import pandas as pd
-import numpy as np
-from numpy.linalg import norm
-from scipy.interpolate import interp1d
-import scipy.stats as stats
+
+
+def usage():
+    print('python csv2acc.py --ifile <input_file> --l <labels_file>')
+    print()
+    print('Example:')
+    print('python csv2acc.py --ifile data/ACC_capture.csv --l datasets/labels.csv')
+
 
 if __name__ == "__main__":
     inputfile = ''
     labelsfile = ''
 
-    # Default values for sampling rate and windows size
-    sr = 35
-    ws = 1
-
     # Read command options
     try:
-        options, args = getopt.getopt(sys.argv[1:], "hi:s:w:l", ["ifile=", "labels="])
+        options, args = getopt.getopt(sys.argv[1:], "hi:l", ["ifile=", "l="])
     except getopt.GetoptError:
-        print('csv2acc.py -i <inputfile> -l <labels_file>')
+        usage()
         sys.exit(2)
     for opt, arg in options:
         if opt == '-h':
-            print('csv2acc.py -i <inputfile> -l <labels_file>')
+            usage()
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
-        elif opt in ("-l", "--labels"):
+        elif opt in ("-l", "--l"):
             labelsfile = arg
     if inputfile == '':
         print('No input file provided')
+        usage()
         sys.exit(2)
     if labelsfile == '':
         print('No labels file provided')
+        usage()
         sys.exit(2)
 
     # Read the labels file
@@ -78,10 +77,8 @@ if __name__ == "__main__":
         # print(data)
         print(label['device_id'], label['start_timestamp'], label['stop_timestamp'])
 
-
-
         if data.empty:
-            print("Alert: No data found between the specified timestamps")
+            print("Alert: No data found between the specified timestamps in labels file")
         else:
             data['start_timestamp'] = label['start_timestamp']
             data['stop_timestamp'] = label['stop_timestamp']
@@ -92,5 +89,5 @@ if __name__ == "__main__":
     outputfile = inputfile + '.raw.csv'
     if len(raw_dfs):
         result = pd.concat(raw_dfs)
-        result.to_csv(outputfile, sep=',')
+        result.to_csv(outputfile, sep=',', index=False)
 

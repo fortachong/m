@@ -14,12 +14,20 @@
 	+-- csv2gps_dataset.py
 	+-- json2csv.py
 	+-- json2json.py
+	+-- lib.py
 	+-- predict_acc.py
 	+-- prejson.py
 	+-- train_dt_acc.py
+	+-- train_gb_acc.py
 	+-- train_rf_acc.py
 	+-- train_svm_rbf_acc.py
 ```
+
+### 1.1. Program files
+
+Program | Purpose
+--------|------------
+
 
 
 ## 2. Process
