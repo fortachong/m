@@ -1,0 +1,7 @@
+f1_max_acc
+f1_mean_acc
+f1_min_acc
+f1_std_acc
+f3_abs_fft_1hz
+f3_abs_fft_2hz
+f3_abs_fft_3hz

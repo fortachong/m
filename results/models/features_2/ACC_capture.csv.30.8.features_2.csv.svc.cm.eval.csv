@@ -1,0 +1,5 @@
+True labels,car,train,tramway,walk
+car,1084,150,23,7
+train,191,164,19,7
+tramway,102,48,46,7
+walk,35,26,18,221

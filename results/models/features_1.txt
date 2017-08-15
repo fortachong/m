@@ -1,0 +1,10 @@
+f1_max_acc
+f1_mean_acc
+f1_median_acc
+f1_min_acc
+f1_std_acc
+f2_max_dacc
+f2_mean_dacc
+f2_median_dacc
+f2_min_dacc
+f2_std_dacc

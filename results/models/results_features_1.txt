@@ -1,0 +1,480 @@
+##################################################################################################
+# DT Models
+python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+Decision Tree Model
+Using input file: datasets/ACC_capture.csv.30.2.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 27 candidates, totalling 81 fits
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    7.3s
+[Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:   11.8s finished
+Best score: 0.865
+Best parameters:
+        classifier__max_depth: 100
+        classifier__min_samples_leaf: 5
+        classifier__min_samples_split: 10
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.90      0.91      0.91      4968
+          1       0.80      0.82      0.81      1594
+          2       0.72      0.64      0.68       795
+          3       0.97      0.96      0.97      1220
+
+avg / total       0.88      0.88      0.88      8577
+
+Confusion Matrix:
+[[4531  264  159   14]
+ [ 254 1309   27    4]
+ [ 226   46  509   14]
+ [  22   11   13 1174]]
+
+
+
+ python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+Decision Tree Model
+Using input file: datasets/ACC_capture.csv.30.5.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.dt.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.dt.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 27 candidates, totalling 81 fits
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    3.9s
+[Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:    5.3s finished
+Best score: 0.825
+Best parameters:
+        classifier__max_depth: 150
+        classifier__min_samples_leaf: 5
+        classifier__min_samples_split: 5
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.88      0.87      0.87      1984
+          1       0.71      0.74      0.73       658
+          2       0.56      0.53      0.54       306
+          3       0.96      0.97      0.96       484
+
+avg / total       0.83      0.83      0.83      3432
+
+Confusion Matrix:
+[[1721  153  105    5]
+ [ 137  490   23    8]
+ [  93   43  161    9]
+ [  11    4    1  468]]
+ 
+ 
+python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+Decision Tree Model
+Using input file: datasets/ACC_capture.csv.30.8.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.dt.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.dt.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 27 candidates, totalling 81 fits
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    3.3s
+[Parallel(n_jobs=-1)]: Done  74 out of  81 | elapsed:    4.1s remaining:    0.3s
+[Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:    4.2s finished
+Best score: 0.807
+Best parameters:
+        classifier__max_depth: 150
+        classifier__min_samples_leaf: 5
+        classifier__min_samples_split: 10
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.86      0.89      0.87      1264
+          1       0.64      0.67      0.66       381
+          2       0.62      0.44      0.52       203
+          3       0.96      0.94      0.95       300
+
+avg / total       0.81      0.82      0.81      2148
+
+Confusion Matrix:
+[[1124  104   33    3]
+ [ 105  257   16    3]
+ [  72   34   90    7]
+ [   9    4    6  281]]
+ 
+##################################################################################################
+# Support Vector Classifier
+
+python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+Support Vector Classifier Model
+Using input file: datasets/ACC_capture.csv.30.2.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.svc.rbf.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.svc.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 3 candidates, totalling 9 fits
+[Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:   52.8s finished
+Best score: 0.781
+Best parameters:
+        classifier__gamma: 10
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.82      0.90      0.86      4968
+          1       0.73      0.63      0.68      1594
+          2       0.64      0.47      0.54       795
+          3       0.94      0.88      0.91      1220
+
+avg / total       0.80      0.81      0.80      8577
+
+Confusion Matrix:
+[[4480  317  140   31]
+ [ 509 1000   63   22]
+ [ 368   42  375   10]
+ [ 129    9    4 1078]]
+ 
+ python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+Support Vector Classifier Model
+Using input file: datasets/ACC_capture.csv.30.5.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.svc.rbf.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.svc.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 3 candidates, totalling 9 fits
+[Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:   11.2s finished
+Best score: 0.754
+Best parameters:
+        classifier__gamma: 1
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.80      0.91      0.85      1984
+          1       0.69      0.61      0.65       658
+          2       0.62      0.33      0.43       306
+          3       0.95      0.85      0.89       484
+
+avg / total       0.78      0.79      0.78      3432
+
+Confusion Matrix:
+[[1804  140   29   11]
+ [ 219  403   27    9]
+ [ 167   35  101    3]
+ [  62    6    7  409]]
+ 
+ python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+Support Vector Classifier Model
+Using input file: datasets/ACC_capture.csv.30.8.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.svc.rbf.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.svc.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 3 candidates, totalling 9 fits
+[Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:    5.2s finished
+Best score: 0.741
+Best parameters:
+        classifier__gamma: 1
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.78      0.89      0.83      1264
+          1       0.59      0.54      0.56       381
+          2       0.59      0.24      0.34       203
+          3       0.95      0.85      0.90       300
+
+avg / total       0.75      0.76      0.75      2148
+
+Confusion Matrix:
+[[1128  106   27    3]
+ [ 161  206    4   10]
+ [ 119   36   48    0]
+ [  41    2    3  254]]
+ 
+
+##################################################################################################
+# Random Forest
+python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+Random Forest Model
+Using input file: datasets/ACC_capture.csv.30.2.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.rf.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.rf.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 72 candidates, totalling 216 fits
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:   20.7s
+[Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:  1.8min
+[Parallel(n_jobs=-1)]: Done 216 out of 216 | elapsed:  2.1min finished
+Best score: 0.897
+Best parameters:
+        classifier__max_depth: 50
+        classifier__min_samples_leaf: 5
+        classifier__min_samples_split: 5
+        classifier__n_estimators: 20
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.88      0.98      0.93      4968
+          1       0.91      0.79      0.85      1594
+          2       0.98      0.59      0.74       795
+          3       0.97      0.98      0.98      1220
+
+avg / total       0.91      0.91      0.90      8577
+
+Confusion Matrix:
+[[4851   99    4   14]
+ [ 327 1262    4    1]
+ [ 289   17  468   21]
+ [  15    5    2 1198]]
+ 
+
+python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+Random Forest Model
+Using input file: datasets/ACC_capture.csv.30.5.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.rf.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.rf.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 72 candidates, totalling 216 fits
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    9.3s
+[Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:   41.7s
+[Parallel(n_jobs=-1)]: Done 216 out of 216 | elapsed:   48.0s finished
+Best score: 0.853
+Best parameters:
+        classifier__max_depth: 50
+        classifier__min_samples_leaf: 5
+        classifier__min_samples_split: 5
+        classifier__n_estimators: 50
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.87      0.97      0.92      1984
+          1       0.88      0.73      0.80       658
+          2       0.92      0.49      0.64       306
+          3       0.95      0.98      0.96       484
+
+avg / total       0.89      0.89      0.88      3432
+
+Confusion Matrix:
+[[1931   38    5   10]
+ [ 164  482    8    4]
+ [ 115   28  151   12]
+ [   8    1    0  475]]
+ 
+ python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+Random Forest Model
+Using input file: datasets/ACC_capture.csv.30.8.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.rf.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.rf.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 72 candidates, totalling 216 fits
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    6.8s
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+[Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:   22.7s
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+[Parallel(n_jobs=-1)]: Done 216 out of 216 | elapsed:   25.4s finished
+Best score: 0.826
+Best parameters:
+        classifier__max_depth: 50
+        classifier__min_samples_leaf: 5
+        classifier__min_samples_split: 10
+        classifier__n_estimators: 50
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.86      0.96      0.91      1264
+          1       0.80      0.71      0.75       381
+          2       0.89      0.45      0.60       203
+          3       0.96      0.97      0.97       300
+
+avg / total       0.87      0.87      0.86      2148
+
+Confusion Matrix:
+[[1208   46    8    2]
+ [ 105  271    3    2]
+ [  82   22   92    7]
+ [   8    1    0  291]]
+
+ 
+##################################################################################################
+# Gradient Boosting
+
+python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+Gradient Boosting Model
+Using input file: datasets/ACC_capture.csv.30.2.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.gb.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.gb.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 12 candidates, totalling 36 fits
+[Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  7.2min finished
+Best score: 0.903
+Best parameters:
+        classifier__max_depth: 6
+        classifier__max_features: 0.3
+        classifier__min_samples_leaf: 9
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.89      0.97      0.93      4968
+          1       0.90      0.81      0.85      1594
+          2       0.95      0.61      0.74       795
+          3       0.98      0.98      0.98      1220
+
+avg / total       0.91      0.91      0.90      8577
+
+Confusion Matrix:
+[[4832  111   14   11]
+ [ 300 1287    6    1]
+ [ 268   23  486   18]
+ [  16    7    7 1190]]
+ 
+ 
+###################################################################################################
+
+python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+Gradient Boosting Model
+Using input file: datasets/ACC_capture.csv.30.5.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.gb.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.gb.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 12 candidates, totalling 36 fits
+[Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  3.2min finished
+Best score: 0.870
+Best parameters:
+        classifier__max_depth: 6
+        classifier__max_features: 0.3
+        classifier__min_samples_leaf: 9
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.88      0.96      0.92      1984
+          1       0.85      0.77      0.81       658
+          2       0.91      0.54      0.68       306
+          3       0.97      0.98      0.97       484
+
+avg / total       0.89      0.89      0.88      3432
+
+Confusion Matrix:
+[[1909   60   10    5]
+ [ 146  506    5    1]
+ [ 103   27  165   11]
+ [   5    4    1  474]]
+ 
+##################################################################################################################
+
+python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+Gradient Boosting Model
+Using input file: datasets/ACC_capture.csv.30.8.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.gb.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.gb.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 12 candidates, totalling 36 fits
+[Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  2.3min finished
+Best score: 0.857
+Best parameters:
+        classifier__max_depth: 6
+        classifier__max_features: 1.0
+        classifier__min_samples_leaf: 3
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.87      0.95      0.91      1264
+          1       0.78      0.73      0.76       381
+          2       0.84      0.52      0.64       203
+          3       0.97      0.95      0.96       300
+
+avg / total       0.87      0.87      0.86      2148
+
+Confusion Matrix:
+[[1199   55    8    2]
+ [  92  279    9    1]
+ [  75   17  105    6]
+ [   6    5    3  286]]
+
