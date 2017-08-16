@@ -528,7 +528,7 @@ function drawTraces(Traces, Map) {
           }
           addr += '</select>';
         }
-        
+        // Add the control
         if(addr != '') {
           msg += addr;
         }
@@ -547,9 +547,14 @@ function drawTraces(Traces, Map) {
             pps += '</select>';
           }
         }
-        
+        // Add the control
         if(pps != '') {
           msg += pps;
+        }
+        
+        // Add the Update Button
+        if((addr != '') || (pps != '')) {
+          // Add a div control
         }
         
         // In the case of the POI, add a circle for the radius
