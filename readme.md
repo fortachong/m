@@ -366,7 +366,7 @@ sed 's/{"metadata":/\n{"metadata":/g' original.json > data.json
 
 Then, execute the python program:
 
-```
+```console
 python json2json.py --ifile data.json --odir data
 ```
 
@@ -378,7 +378,7 @@ the labels file, and the acceleration captures data set that agrees with the lab
 
 To generate gps traces, according to the labels file:
 
-```
+```console
 python csv2gps_dataset.py --ifile data/ACC_capture.csv --l datasets/labels.csv
 ```
 
