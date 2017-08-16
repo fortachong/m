@@ -60,11 +60,16 @@ if __name__ == "__main__":
     # The final dataframe is:
     # device_id, start_timestamp, stop_timestamp, frame, features, label
 
+    outputfile = inputfile + '.raw.csv'
     # Labels file
     df_labels = pd.read_csv(labelsfile)
 
     # Data file
     df = pd.read_csv(inputfile)
+
+    print("Using input file: {}".format(inputfile))
+    print("Using labels file: {}".format(labelsfile))
+    print("Output file will be generated in: {}".format(outputfile))
 
     # Iterate through all the labels:
     raw_dfs = []
@@ -86,7 +91,6 @@ if __name__ == "__main__":
             raw_dfs.append(data)
             # print(df_features.head())
 
-    outputfile = inputfile + '.raw.csv'
     if len(raw_dfs):
         result = pd.concat(raw_dfs)
         result.to_csv(outputfile, sep=',', index=False)

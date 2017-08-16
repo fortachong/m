@@ -27,6 +27,7 @@
 
 Program | Purpose
 --------|------------
+csv2acc.py | Generates a labeled raw dataset from a csv file with the acceleration captures
 
 
 
@@ -245,9 +246,76 @@ f3_abs_fft_3hz | Magnitude of fft of magnitude of acceleration vector at 3 Hz
 
 
 ### 2.4. Learning Algorithms
+Using the datasets generated, there are many possible variations of models we can build using
+a combination of window size, sample rate, and the features we want to select. The program
+expects a data set `.csv` file, and a features `.txt` file. The last file is a text file
+enumerating in each line the features we are going to use. The program will output 
+a text message summarizing the process, performance metrics
+and a confussion matrix. For testing and performace metrics we selected a partition setup of 60% 
+for training and 40% for testing. Two files will be generated: a `.model` file, and a `.csv` file 
+with the confussion matrix. There are 4 types of classifiers: 
+decision tree, support vector classifier, random forest, and gradient boosting classifier. They are
+`train_dt_acc.py`, `train_svm_rbf_acc.py`, `train_rf_acc.py`, `train_gb_acc.py`. An example of the
+execution is:
+
+```console
+
+python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+Decision Tree Model
+Using input file: datasets/ACC_capture.csv.30.2.features.csv
+Using features file: models/features_1.txt
+Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.model
+Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.cm.eval.csv
+Features:
+['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+Fitting 3 folds for each of 27 candidates, totalling 81 fits
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    7.3s
+[Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:   11.8s finished
+Best score: 0.865
+Best parameters:
+        classifier__max_depth: 100
+        classifier__min_samples_leaf: 5
+        classifier__min_samples_split: 10
+Class encoding:
+0 : car
+1 : train
+2 : tramway
+3 : walk
+Classification Report on Testing Data:
+             precision    recall  f1-score   support
+
+          0       0.90      0.91      0.91      4968
+          1       0.80      0.82      0.81      1594
+          2       0.72      0.64      0.68       795
+          3       0.97      0.96      0.97      1220
+
+avg / total       0.88      0.88      0.88      8577
+
+Confusion Matrix:
+[[4531  264  159   14]
+ [ 254 1309   27    4]
+ [ 226   46  509   14]
+ [  22   11   13 1174]]
+
+```
 
 
+### 2.5. Predictions
+The requirements for prediction are: a prepared dataset and the model file. Note that
+the prepared dataset and the model file have to generated with the same parameters 
+(window size and sampling rate). The program will output the performance metrics and
+will generated two `.csv` files: the confussion matrix and the predictions for each
+sample.
 
+```console
+python predict_acc.py --ifile testing/ACC_capture.csv.30.2.features.csv --m models/ACC_capture.csv.30.2.csv.dt.model
+```
+
+Also, we can generate the predictions used for the model testing using the flag `--t 1`
+
+```console
+python predict_acc.py --ifile testing/ACC_capture.csv.30.2.features.csv --m models/ACC_capture.csv.30.2.csv.dt.model --t 1
+```
 
 ## 3. Examples:
 
