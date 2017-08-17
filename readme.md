@@ -26,8 +26,17 @@
 +-- results
 +-- ui
 ```
+### 1.1. Directory structure
 
-### 1.1. Program files in `process` directory
+Directory | Purpose
+----------|------------
+geolife | Experiments with geolife dataset
+mobi | Web interface for users
+process | Programs related to data processing and training
+results | Resulting models and data sets
+ui | Web interface for visualization and validation
+
+### 1.2. Program files in `process` directory
 
 Program | Purpose
 --------|------------

@@ -1,13 +1,17 @@
-##################################################################################################
-# DT Models
+############################################################################################################################
+# Decision Tree Classifier
+# Window size 2 sec
 python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+
 Decision Tree Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 27 candidates, totalling 81 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    7.3s
 [Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:   11.8s finished
@@ -37,16 +41,18 @@ Confusion Matrix:
  [ 226   46  509   14]
  [  22   11   13 1174]]
 
+# Window size 5 sec 
+python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
 
-
- python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
 Decision Tree Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.dt.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.dt.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 27 candidates, totalling 81 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    3.9s
 [Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:    5.3s finished
@@ -75,16 +81,19 @@ Confusion Matrix:
  [ 137  490   23    8]
  [  93   43  161    9]
  [  11    4    1  468]]
- 
- 
+
+# Window size 8 sec 
 python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+
 Decision Tree Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.dt.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.dt.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 27 candidates, totalling 81 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    3.3s
 [Parallel(n_jobs=-1)]: Done  74 out of  81 | elapsed:    4.1s remaining:    0.3s
@@ -115,17 +124,20 @@ Confusion Matrix:
  [  72   34   90    7]
  [   9    4    6  281]]
  
-##################################################################################################
-# Support Vector Classifier
-
+############################################################################################################################
+# Support Vector Classifier with RBF
+# Window size 2 sec 
 python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+
 Support Vector Classifier Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.svc.rbf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.svc.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 3 candidates, totalling 9 fits
 [Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:   52.8s finished
 Best score: 0.781
@@ -151,15 +163,19 @@ Confusion Matrix:
  [ 509 1000   63   22]
  [ 368   42  375   10]
  [ 129    9    4 1078]]
- 
- python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+
+# Window size 5 sec  
+python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+
 Support Vector Classifier Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.svc.rbf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.svc.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 3 candidates, totalling 9 fits
 [Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:   11.2s finished
 Best score: 0.754
@@ -186,14 +202,18 @@ Confusion Matrix:
  [ 167   35  101    3]
  [  62    6    7  409]]
  
- python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+# Window size 8 sec 
+python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+
 Support Vector Classifier Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.svc.rbf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.svc.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 3 candidates, totalling 9 fits
 [Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:    5.2s finished
 Best score: 0.741
@@ -220,17 +240,20 @@ Confusion Matrix:
  [ 119   36   48    0]
  [  41    2    3  254]]
  
-
-##################################################################################################
-# Random Forest
+############################################################################################################################
+# Random Forest Classifier
+# Window size 2 sec 
 python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+
 Random Forest Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.rf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.rf.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 72 candidates, totalling 216 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:   20.7s
 [Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:  1.8min
@@ -262,15 +285,18 @@ Confusion Matrix:
  [ 289   17  468   21]
  [  15    5    2 1198]]
  
-
+# Window size 5 sec 
 python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+
 Random Forest Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.rf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.rf.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 72 candidates, totalling 216 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    9.3s
 [Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:   41.7s
@@ -302,14 +328,18 @@ Confusion Matrix:
  [ 115   28  151   12]
  [   8    1    0  475]]
  
- python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+# Window size 8 sec 
+python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+
 Random Forest Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.rf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.rf.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 72 candidates, totalling 216 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    6.8s
 C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
@@ -361,18 +391,20 @@ Confusion Matrix:
  [  82   22   92    7]
  [   8    1    0  291]]
 
- 
-##################################################################################################
-# Gradient Boosting
-
+############################################################################################################################
+# Gradient Boosting Classifier
+# Window size 2 sec 
 python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+
 Gradient Boosting Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.gb.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.gb.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 12 candidates, totalling 36 fits
 [Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  7.2min finished
 Best score: 0.903
@@ -400,18 +432,19 @@ Confusion Matrix:
  [ 300 1287    6    1]
  [ 268   23  486   18]
  [  16    7    7 1190]]
- 
- 
-###################################################################################################
 
+# Window size 5 sec 
 python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_1.txt --odir models
+
 Gradient Boosting Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.gb.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.gb.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 12 candidates, totalling 36 fits
 [Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  3.2min finished
 Best score: 0.870
@@ -440,16 +473,18 @@ Confusion Matrix:
  [ 103   27  165   11]
  [   5    4    1  474]]
  
-##################################################################################################################
-
+# Window size 8 sec 
 python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_1.txt --odir models
+
 Gradient Boosting Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.gb.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.gb.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 12 candidates, totalling 36 fits
 [Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  2.3min finished
 Best score: 0.857
@@ -477,4 +512,3 @@ Confusion Matrix:
  [  92  279    9    1]
  [  75   17  105    6]
  [   6    5    3  286]]
-

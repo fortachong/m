@@ -73,6 +73,7 @@ if __name__ == "__main__":
     outputfile = fname + '.svc.rbf.model'
     # Confusion Matrix File Name
     cmfile = fname + '.svc.cm.eval.csv'
+    print()
     print("Support Vector Classifier Model")
     print("Using input file: {}".format(inputfile))
     print("Using features file: {}".format(featuresfile))
@@ -81,8 +82,10 @@ if __name__ == "__main__":
 
     df = pd.read_csv(inputfile)
     selected_features = lib.read_features(featuresfile)
+    print()
     print("Features:")
     print(selected_features)
+    print()
 
     X = df[selected_features]
     y_labels = df['label']

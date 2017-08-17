@@ -1,13 +1,17 @@
-#######################################################################################################################
-# Dt model
+############################################################################################################################
+# Decision Tree Classifier
+# Window size 2 sec
 python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_2.txt --odir models
+
 Decision Tree Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 27 candidates, totalling 81 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    6.0s
 [Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:    9.1s finished
@@ -37,15 +41,18 @@ Confusion Matrix:
  [ 332   66  345   52]
  [  26   38   30 1126]]
  
- 
+# Window size 5 sec 
 python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_2.txt --odir models
+
 Decision Tree Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.dt.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.dt.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 27 candidates, totalling 81 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    3.3s
 [Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:    4.5s finished
@@ -75,15 +82,18 @@ Confusion Matrix:
  [ 129   56   96   25]
  [  10   11    6  457]]
  
-
+# Window size 8 sec 
 python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_2.txt --odir models
+
 Decision Tree Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.dt.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.dt.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 27 candidates, totalling 81 fits
 [Parallel(n_jobs=-1)]: Done  51 tasks      | elapsed:    3.2s
 [Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:    3.8s finished
@@ -112,19 +122,21 @@ Confusion Matrix:
  [ 157  201    7   16]
  [  83   39   58   23]
  [   7    8   10  275]]
-
  
 ############################################################################################################################
-# SVM
-
+# Support Vector Classifier with RBF
+# Window size 2 sec
 python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_2.txt --odir models
+
 Support Vector Classifier Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.svc.rbf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.svc.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 3 candidates, totalling 9 fits
 [Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:   56.4s finished
 Best score: 0.707
@@ -151,15 +163,18 @@ Confusion Matrix:
  [ 393  186  198   18]
  [ 160   82   87  891]]
  
- 
+# Window size 5 sec 
 python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_2.txt --odir models
+
 Support Vector Classifier Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.svc.rbf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.svc.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 3 candidates, totalling 9 fits
 [Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:   11.2s finished
 Best score: 0.693
@@ -186,15 +201,18 @@ Confusion Matrix:
  [ 140   85   75    6]
  [  70   35   37  342]]
  
- 
+# Window size 8 sec 
 python train_svm_rbf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_2.txt --odir models
+
 Support Vector Classifier Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.svc.rbf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.svc.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 3 candidates, totalling 9 fits
 [Parallel(n_jobs=-1)]: Done   9 out of   9 | elapsed:    5.6s finished
 Best score: 0.686
@@ -220,18 +238,21 @@ Confusion Matrix:
  [ 191  164   19    7]
  [ 102   48   46    7]
  [  35   26   18  221]]
-
  
-#################################################################################################
-
+############################################################################################################################
+# Random Forest Classifier
+# Window size 2 sec 
 python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_2.txt --odir models
+
 Random Forest Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.rf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.rf.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 72 candidates, totalling 216 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:   16.0s
 [Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:  1.4min
@@ -263,15 +284,18 @@ Confusion Matrix:
  [ 329   76  339   51]
  [  21   21    9 1169]]
 
- 
+# Window size 5 sec 
 python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_2.txt --odir models
+
 Random Forest Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.rf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.rf.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 72 candidates, totalling 216 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    7.5s
 [Parallel(n_jobs=-1)]: Done 192 tasks      | elapsed:   29.7s
@@ -303,15 +327,18 @@ Confusion Matrix:
  [ 129   45  107   25]
  [   8   10    9  457]]
  
- 
+# Window size 8 sec  
 python train_rf_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_2.txt --odir models
+
 Random Forest Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.rf.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.rf.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 72 candidates, totalling 216 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    5.6s
 C:\Users\Jorge\AppData\Local\Programs\Python\Python35\lib\site-packages\sklearn\metrics\classification.py:1113: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
@@ -363,16 +390,20 @@ Confusion Matrix:
  [  88   34   61   20]
  [  12    4    8  276]]
  
-#################################################################################################################
-# GB
+############################################################################################################################
+# Gradient Boosting Classifier
+# Window size 2 sec  
 python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_2.txt --odir models
+
 Gradient Boosting Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.gb.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.gb.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 12 candidates, totalling 36 fits
 [Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  4.4min finished
 Best score: 0.819
@@ -400,15 +431,19 @@ Confusion Matrix:
  [ 605  925   42   22]
  [ 320   78  349   48]
  [  26   28   15 1151]]
- 
- python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_2.txt --odir models
+
+# Window size 5 sec  
+python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.5.features.csv --f models/features_2.txt --odir models
+
 Gradient Boosting Model
 Using input file: datasets/ACC_capture.csv.30.5.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.5.features.csv.gb.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.5.features.csv.gb.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 12 candidates, totalling 36 fits
 [Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  2.2min finished
 Best score: 0.785
@@ -436,15 +471,19 @@ Confusion Matrix:
  [ 270  354   25    9]
  [ 127   46  105   28]
  [   9    8   13  454]]
- 
+
+# Window size 8 sec   
 python train_gb_acc.py --ifile datasets/ACC_capture.csv.30.8.features.csv --f models/features_2.txt --odir models
+
 Gradient Boosting Model
 Using input file: datasets/ACC_capture.csv.30.8.features.csv
 Using features file: models/features_2.txt
 Model file will be generated in: models/ACC_capture.csv.30.8.features.csv.gb.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.8.features.csv.gb.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_min_acc', 'f1_std_acc', 'f3_abs_fft_1hz', 'f3_abs_fft_2hz', 'f3_abs_fft_3hz']
+
 Fitting 3 folds for each of 12 candidates, totalling 36 fits
 [Parallel(n_jobs=-1)]: Done  36 out of  36 | elapsed:  1.5min finished
 Best score: 0.759

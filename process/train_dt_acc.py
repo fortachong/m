@@ -75,6 +75,7 @@ if __name__ == "__main__":
     # Confusion Matrix File Name
     cmfile = fname + '.dt.cm.eval.csv'
 
+    print()
     print("Decision Tree Model")
     print("Using input file: {}".format(inputfile))
     print("Using features file: {}".format(featuresfile))
@@ -83,8 +84,10 @@ if __name__ == "__main__":
 
     df = pd.read_csv(inputfile)
     selected_features = lib.read_features(featuresfile)
+    print()
     print("Features:")
     print(selected_features)
+    print()
 
     X = df[selected_features]
     y_labels = df['label']
