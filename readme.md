@@ -286,13 +286,16 @@ execution is:
 ```console
 
 python train_dt_acc.py --ifile datasets/ACC_capture.csv.30.2.features.csv --f models/features_1.txt --odir models
+
 Decision Tree Model
 Using input file: datasets/ACC_capture.csv.30.2.features.csv
 Using features file: models/features_1.txt
 Model file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.model
 Confusion matrix file will be generated in: models/ACC_capture.csv.30.2.features.csv.dt.cm.eval.csv
+
 Features:
 ['f1_max_acc', 'f1_mean_acc', 'f1_median_acc', 'f1_min_acc', 'f1_std_acc', 'f2_max_dacc', 'f2_mean_dacc', 'f2_median_dacc', 'f2_min_dacc', 'f2_std_dacc']
+
 Fitting 3 folds for each of 27 candidates, totalling 81 fits
 [Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:    7.3s
 [Parallel(n_jobs=-1)]: Done  81 out of  81 | elapsed:   11.8s finished

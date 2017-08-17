@@ -83,10 +83,12 @@ if __name__ == "__main__":
     outputfile = inputfile + '.prediction.csv'
     cmfile = inputfile + '.prediction.cm.csv'
 
+    print()
     print("Using model file: {}".format(modelfile))
     print("Using input file: {}".format(inputfile))
     print("Predictions file will be generated in: {}".format(outputfile))
     print("Confusion matrix file will be generated in: {}".format(cmfile))
+    print()
 
     # Read the data from inputfile
     df = pd.read_csv(inputfile)
